@@ -58,6 +58,21 @@ class Graph {
             })
         }
     }
+
+    dfs(startingNodeKey, visitedFn) {
+        const startingNode = this.getNode(startingNodeKey)
+        const visited = this.nodes.reduce((tot, n) => {
+            tot[n.key] = false
+            return tot
+        }, {})
+        const explore = function (node) {
+            if (visited[node.key]) return
+            visitedFn(node)
+            visited[node.key] = true
+            node.neighbors.map(ngh => explore(ngh))
+        }
+        explore(startingNode)
+    }
 }
 
 const graph1 = new Graph()
@@ -98,3 +113,15 @@ nodes.map(k => graph2.addNode(k))
 edges.map(dg => graph2.addEdge(...dg))
 
 graph2.bfs('a', n => console.log(n.key))
+
+
+console.log('------------------------------')
+
+
+
+const graph3 = new Graph(true)
+
+nodes.map(k => graph3.addNode(k))
+edges.map(dg => graph3.addEdge(...dg))
+
+graph3.dfs('a', n => console.log(n.key))
