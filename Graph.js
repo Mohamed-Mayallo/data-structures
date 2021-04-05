@@ -16,6 +16,10 @@ class Graph {
     edges = []
     isDirected = false
 
+    constructor(isDirected = false) {
+        this.isDirected = isDirected
+    }
+
     addNode(key) {
         this.nodes.push(new Node(key))
     }
@@ -35,20 +39,62 @@ class Graph {
     print() {
         this.nodes.map(n => console.log(`${n.key} => ${n.neighbors.map(ngh => ngh.key)}`))
     }
+
+    bfs(startingNodeKey, visitedFn) {
+        const startingNode = this.getNode(startingNodeKey)
+        const visited = this.nodes.reduce((tot, n) => {
+            tot[n.key] = false
+            return tot
+        }, {})
+        const queue = [startingNode]
+        while (queue.length) {
+            const visitedNode = queue.pop()
+            if (!visited[visitedNode.key]) {
+                visitedFn(visitedNode)
+                visited[visitedNode.key] = true
+            }
+            visitedNode.neighbors.map(ngh => {
+                if (!visited[ngh.key]) queue.unshift(ngh)
+            })
+        }
+    }
 }
 
-const graph = new Graph()
+const graph1 = new Graph()
 
-graph.addNode('A')
-graph.addNode('B')
-graph.addNode('C')
-graph.addNode('D')
+graph1.addNode('A')
+graph1.addNode('B')
+graph1.addNode('C')
+graph1.addNode('D')
 
-graph.addEdge('A', 'B')
-graph.addEdge('A', 'C')
-graph.addEdge('B', 'D')
-graph.addEdge('A', 'D')
-graph.addEdge('C', 'B')
+graph1.addEdge('A', 'B')
+graph1.addEdge('A', 'C')
+graph1.addEdge('B', 'D')
+graph1.addEdge('A', 'D')
+graph1.addEdge('C', 'B')
 
-graph.print()
+graph1.print()
 
+
+
+console.log('------------------------------')
+
+
+
+const graph2 = new Graph(true)
+
+const nodes = ['a', 'b', 'c', 'd', 'e', 'f']
+const edges = [
+    ['a', 'b'],
+    ['a', 'e'],
+    ['a', 'f'],
+    ['b', 'd'],
+    ['b', 'e'],
+    ['c', 'b'],
+    ['d', 'c'],
+    ['d', 'e'],
+]
+nodes.map(k => graph2.addNode(k))
+edges.map(dg => graph2.addEdge(...dg))
+
+graph2.bfs('a', n => console.log(n.key))
