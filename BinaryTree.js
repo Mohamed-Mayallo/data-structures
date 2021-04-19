@@ -75,6 +75,31 @@ class BinaryTree {
       }
     }
   }
+
+  hight(node) {
+    if (!node) return -1;
+    if (!node.left && !node.right) return 0;
+    return 1 + Math.max(this.hight(node.left), this.hight(node.right));
+  }
+
+  min1() {
+    let minValue = Infinity;
+    this.traverse(this.root, (node) => {
+      minValue = Math.min(minValue, node.key);
+    });
+    return minValue;
+  }
+
+  isLeaf(node) {
+    return !node.right && !node.left;
+  }
+
+  min2(root) {
+    if (this.isLeaf(root)) return root.key;
+    const leftKey = this.min2(root.left);
+    const rightKey = this.min2(root.right);
+    return Math.min(Math.min(leftKey, rightKey), root.key);
+  }
 }
 
 const tree = new BinaryTree("a");
@@ -102,3 +127,7 @@ console.log(t.find(4));
 t.print("in-order");
 t.print("pre-order");
 t.print("post-order");
+
+console.log(t.hight(t.root));
+console.log(t.min1());
+console.log(t.min2(t.root));
