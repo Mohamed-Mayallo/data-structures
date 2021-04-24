@@ -100,7 +100,7 @@ class BinaryTree {
   isEqualTraverse(node, otherNode) {
     if (!node && !otherNode) return true;
     if (
-      node.key === otherNode.key &&
+      node?.key === otherNode?.key &&
       this.isEqualTraverse(node.left, otherNode.left) &&
       this.isEqualTraverse(node.right, otherNode.right)
     )
@@ -111,6 +111,28 @@ class BinaryTree {
   isEqual(otherRoot) {
     if (!otherRoot) return false;
     return this.isEqualTraverse(this.root, otherRoot);
+  }
+
+  swapRoot() {
+    const temp = this.root.left;
+    this.root.left = this.root.right;
+    this.root.right = temp;
+  }
+
+  isValidBSTTraverse(node, minValue, maxValue) {
+    if (!node) return true;
+    if (
+      node.key > minValue &&
+      node.key < maxValue &&
+      this.isValidBSTTraverse(node.right, node.key, maxValue) &&
+      this.isValidBSTTraverse(node.left, minValue, node.key)
+    )
+      return true;
+    return false;
+  }
+
+  isValidBST() {
+    return this.isValidBSTTraverse(this.root, -Infinity, Infinity);
   }
 }
 
@@ -152,3 +174,7 @@ t2.insert(8);
 t2.insert(10);
 
 console.log(t2.isEqual(t.root));
+
+console.log(t.isValidBST());
+t2.swapRoot();
+console.log(t2.isValidBST());
