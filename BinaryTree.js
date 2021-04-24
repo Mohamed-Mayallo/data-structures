@@ -78,7 +78,7 @@ class BinaryTree {
 
   hight(node) {
     if (!node) return -1;
-    if (!node.left && !node.right) return 0;
+    if (this.isLeaf(node)) return 0;
     return 1 + Math.max(this.hight(node.left), this.hight(node.right));
   }
 
@@ -147,6 +147,12 @@ class BinaryTree {
   nodesAtDistanceKFromRoot(k) {
     return this.nodesAtDistanceKFromRootTraverse(k, this.root, 0);
   }
+
+  traverseLevelOrder_bft() {
+    for (let i = 0; i <= this.hight(this.root); i++)
+      for (let nodeKey of this.nodesAtDistanceKFromRoot(i))
+        console.log(nodeKey);
+  }
 }
 
 const tree = new BinaryTree("a");
@@ -193,3 +199,5 @@ t2.swapRoot();
 console.log(t2.isValidBST());
 
 console.log(t2.nodesAtDistanceKFromRoot(2));
+
+t.traverseLevelOrder_bft();
