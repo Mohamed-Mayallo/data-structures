@@ -82,23 +82,35 @@ class BinaryTree {
     return 1 + Math.max(this.hight(node.left), this.hight(node.right));
   }
 
-  min1() {
-    let minValue = Infinity;
-    this.traverse(this.root, (node) => {
-      minValue = Math.min(minValue, node.key);
-    });
-    return minValue;
-  }
-
   isLeaf(node) {
     return !node.right && !node.left;
   }
 
-  min2(root) {
+  minTraverse(root) {
     if (this.isLeaf(root)) return root.key;
-    const leftKey = this.min2(root.left);
-    const rightKey = this.min2(root.right);
+    const leftKey = this.minTraverse(root.left);
+    const rightKey = this.minTraverse(root.right);
     return Math.min(Math.min(leftKey, rightKey), root.key);
+  }
+
+  min() {
+    return this.minTraverse(this.root);
+  }
+
+  isEqualTraverse(node, otherNode) {
+    if (!node && !otherNode) return true;
+    if (
+      node.key === otherNode.key &&
+      this.isEqualTraverse(node.left, otherNode.left) &&
+      this.isEqualTraverse(node.right, otherNode.right)
+    )
+      return true;
+    return false;
+  }
+
+  isEqual(otherRoot) {
+    if (!otherRoot) return false;
+    return this.isEqualTraverse(this.root, otherRoot);
   }
 }
 
@@ -129,5 +141,14 @@ t.print("pre-order");
 t.print("post-order");
 
 console.log(t.hight(t.root));
-console.log(t.min1());
-console.log(t.min2(t.root));
+console.log(t.min());
+
+const t2 = new BinaryTree(7);
+t2.insert(4);
+t2.insert(9);
+t2.insert(1);
+t2.insert(6);
+t2.insert(8);
+t2.insert(10);
+
+console.log(t2.isEqual(t.root));
