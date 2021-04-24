@@ -134,6 +134,19 @@ class BinaryTree {
   isValidBST() {
     return this.isValidBSTTraverse(this.root, -Infinity, Infinity);
   }
+
+  nodesAtDistanceKFromRootTraverse(k, node, depth) {
+    if (!node) return [];
+    if (depth === k) return [node.key];
+    return [
+      ...this.nodesAtDistanceKFromRootTraverse(k, node.left, depth + 1),
+      ...this.nodesAtDistanceKFromRootTraverse(k, node.right, depth + 1),
+    ];
+  }
+
+  nodesAtDistanceKFromRoot(k) {
+    return this.nodesAtDistanceKFromRootTraverse(k, this.root, 0);
+  }
 }
 
 const tree = new BinaryTree("a");
@@ -178,3 +191,5 @@ console.log(t2.isEqual(t.root));
 console.log(t.isValidBST());
 t2.swapRoot();
 console.log(t2.isValidBST());
+
+console.log(t2.nodesAtDistanceKFromRoot(2));
